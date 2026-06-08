@@ -21,6 +21,7 @@ def main() -> None:
         help="Destination directory for raw data files"
     )
     args = parser.parse_args()
+    args.dest = args.dest.resolve()
 
     args.dest.mkdir(parents=True, exist_ok=True)
     
