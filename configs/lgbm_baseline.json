@@ -1,0 +1,16 @@
+{
+  "run_name": "lgbm_baseline_v1",
+  "competition": "playground-series-s6e5",
+  "id_col": "id",
+  "target_col": "target",
+  "n_splits": 5,
+  "seed": 42,
+  "lgb_params": {
+    "objective": "binary",
+    "metric": "auc",
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "n_estimators": 500,
+    "random_state": 42
+  }
+}

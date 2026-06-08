@@ -1,0 +1,37 @@
+# Python-generated files
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+wheels/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Kaggle / Data / Models (Ignore large binary/CSV files)
+data/
+models/
+submissions/**/*.csv
+submissions/**/*.zip
+!submissions/.gitkeep
+experiments/*.csv
+experiments/*.db
+
+# Credentials & environment configuration
+.env
+.env.*
+kaggle.json
+.kaggle/
+
+# macOS system files
+.DS_Store
+
