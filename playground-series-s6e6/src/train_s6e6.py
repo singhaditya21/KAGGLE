@@ -21,7 +21,7 @@ from experiment_utils import project_root, append_result, utc_now
 
 
 def feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
-    """Creates astronomical color index features from photometric bands."""
+    """Creates astronomical color index features and spatial/redshift transformations."""
     df = df.copy()
     
     # Photometric color differences (ratios in log scale)
@@ -38,6 +38,18 @@ def feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     df["g_z"] = df["g"] - df["z"]
     
     df["r_z"] = df["r"] - df["z"]
+    
+    # Convert alpha and delta (spherical sky coordinates) to Cartesian coordinates
+    alpha_rad = np.radians(df["alpha"])
+    delta_rad = np.radians(df["delta"])
+    df["x"] = np.cos(delta_rad) * np.cos(alpha_rad)
+    df["y"] = np.cos(delta_rad) * np.sin(alpha_rad)
+    df["z"] = np.sin(delta_rad)
+    
+    # Redshift features (cube root handles negatives and compresses long tails)
+    df["redshift_cbrt"] = np.cbrt(df["redshift"])
+    df["redshift_is_near_zero"] = (np.abs(df["redshift"]) < 0.005).astype(int)
+    df["redshift_is_negative"] = (df["redshift"] < 0).astype(int)
     
     # Statistical aggregates across bands
     bands = ["u", "g", "r", "i", "z"]
@@ -104,8 +116,8 @@ def train_s6e6(model_type: str = "lightgbm", config_path: Path | None = None) ->
     print(f"Starting {model_type.upper()} pipeline for run: {config['run_name']}")
     
     # Path configuration
-    train_path = root / "data" / "raw" / "s6e6" / "train.csv"
-    test_path = root / "data" / "raw" / "s6e6" / "test.csv"
+    train_path = root / "data" / "raw" / "train.csv"
+    test_path = root / "data" / "raw" / "test.csv"
     
     if not train_path.exists() or not test_path.exists():
         print("Error: train.csv or test.csv not found.")
@@ -230,14 +242,17 @@ def train_s6e6(model_type: str = "lightgbm", config_path: Path | None = None) ->
     sub = pd.DataFrame({"id": test["id"], "class": test_class_labels})
     sub.to_csv(sub_path, index=False)
     
-    # Save OOF
+    # Save OOF and test predictions
     oof_dir = root / "models" / "oof"
     oof_dir.mkdir(parents=True, exist_ok=True)
     oof_path = oof_dir / f"oof_{config['run_name']}.npy"
+    test_preds_path = oof_dir / f"test_preds_{config['run_name']}.npy"
     np.save(oof_path, oof_preds)
+    np.save(test_preds_path, test_preds)
     
     print(f"Saved submission to {sub_path.relative_to(root)}")
     print(f"Saved OOF predictions to {oof_path.relative_to(root)}")
+    print(f"Saved test predictions to {test_preds_path.relative_to(root)}")
     
     # Append results to experiment log
     result_row = {
@@ -245,13 +260,13 @@ def train_s6e6(model_type: str = "lightgbm", config_path: Path | None = None) ->
         "run_name": config["run_name"],
         "competition": config["competition"],
         "model_family": model_type.upper(),
-        "feature_set": f"Feature v1 ({len(features)} features: SDSS colors)",
+        "feature_set": f"Feature v2 ({len(features)} features: colors, coordinates, redshift transformations)",
         "oof_score": cv_score,
         "fold_scores_json": fold_scores,
         "submission_path": str(sub_path),
         "oof_path": str(oof_path),
         "config_path": str(config_path) if config_path else "",
-        "notes": f"Baseline {model_type} run on Stellar Class (S6E6).",
+        "notes": f"Model {model_type} run on Stellar Class (S6E6) with Feature v2.",
     }
     append_result(root, result_row)
     print("Experiment logged successfully.")

@@ -1,0 +1,24 @@
+{
+  "id": "adityasingh157735/nemotron-reasoning-30b-fine-tuning",
+  "title": "Nemotron Reasoning 30B Fine-Tuning",
+  "code_file": "nemotron-087-training.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [
+    "mayukh18/nemotron-packages",
+    "llkh0a/rtx-wheels",
+    "huikang/huikang-nemotron-repository-snapshot"
+  ],
+  "competition_sources": [
+    "nvidia-nemotron-model-reasoning-challenge"
+  ],
+  "kernel_sources": [],
+  "model_sources": [
+    "metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1",
+    "kienngx/nemotron-nano-30b-trained/triton/tinker-adapter/1"
+  ]
+}
