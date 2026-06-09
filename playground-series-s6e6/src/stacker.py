@@ -9,6 +9,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import balanced_accuracy_score
 from sklearn.preprocessing import LabelEncoder
 import warnings
+from joblib import Parallel, delayed
 
 warnings.filterwarnings('ignore')
 
@@ -38,6 +39,26 @@ def load_preds(path, expected_rows=None):
         
     else:
         raise ValueError(f"Unsupported file type: {path.suffix}")
+
+def fit_fold(tr_idx, val_idx, X_oof, y, C, X_test=None):
+    X_tr, y_tr = X_oof[tr_idx], y[tr_idx]
+    X_val, y_val = X_oof[val_idx], y[val_idx]
+    
+    clf = LogisticRegression(
+        solver='lbfgs',
+        C=C,
+        max_iter=1000,
+        class_weight='balanced',
+        random_state=42
+    )
+    clf.fit(X_tr, y_tr)
+    val_preds = clf.predict_proba(X_val)
+    
+    if X_test is not None:
+        test_preds = clf.predict_proba(X_test)
+        return val_preds, val_idx, test_preds
+    else:
+        return val_preds, val_idx
 
 def main():
     import argparse
@@ -151,20 +172,15 @@ def main():
     
     print("\nTuning regularization strength C:")
     for C in c_values:
+        # Fit folds in parallel (5 jobs for 5 folds)
+        results = Parallel(n_jobs=5)(
+            delayed(fit_fold)(tr_idx, val_idx, X_oof, y, C)
+            for tr_idx, val_idx in skf.split(X_oof, y)
+        )
+        
         oof_preds = np.zeros((N, 3))
-        for fold, (tr_idx, val_idx) in enumerate(skf.split(X_oof, y)):
-            X_tr, y_tr = X_oof[tr_idx], y[tr_idx]
-            X_val, y_val = X_oof[val_idx], y[val_idx]
-            
-            clf = LogisticRegression(
-                solver='lbfgs',
-                C=C,
-                max_iter=1000,
-                class_weight='balanced',
-                random_state=42
-            )
-            clf.fit(X_tr, y_tr)
-            oof_preds[val_idx] = clf.predict_proba(X_val)
+        for val_preds, val_idx in results:
+            oof_preds[val_idx] = val_preds
             
         score = balanced_accuracy_score(y, np.argmax(oof_preds, axis=1))
         print(f"  C = {C:<6} | CV Balanced Acc: {score:.6f}")
@@ -175,23 +191,17 @@ def main():
     print(f"\nBest C: {best_c} with CV Balanced Acc: {best_cv_score:.6f}")
     
     # Generate test predictions using best C
+    results_final = Parallel(n_jobs=5)(
+        delayed(fit_fold)(tr_idx, val_idx, X_oof, y, best_c, X_test)
+        for tr_idx, val_idx in skf.split(X_oof, y)
+    )
+    
     oof_final = np.zeros((N, 3))
     test_final = np.zeros((M, 3))
     
-    for fold, (tr_idx, val_idx) in enumerate(skf.split(X_oof, y)):
-        X_tr, y_tr = X_oof[tr_idx], y[tr_idx]
-        X_val, y_val = X_oof[val_idx], y[val_idx]
-        
-        clf = LogisticRegression(
-            solver='lbfgs',
-            C=best_c,
-            max_iter=1000,
-            class_weight='balanced',
-            random_state=42
-        )
-        clf.fit(X_tr, y_tr)
-        oof_final[val_idx] = clf.predict_proba(X_val)
-        test_final += clf.predict_proba(X_test) / n_splits
+    for val_preds, val_idx, test_preds in results_final:
+        oof_final[val_idx] = val_preds
+        test_final += test_preds / n_splits
         
     overall_score = balanced_accuracy_score(y, np.argmax(oof_final, axis=1))
     print(f"Overall Stacked CV Balanced Acc (Argmax): {overall_score:.6f}")
