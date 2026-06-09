@@ -12,8 +12,20 @@ from sklearn.preprocessing import LabelEncoder
 from experiment_utils import project_root, append_result, utc_now
 
 
+import argparse
+
 def main() -> None:
     root = project_root()
+    
+    parser = argparse.ArgumentParser(description="Blend OOF predictions.")
+    parser.add_argument(
+        "--use-original", 
+        action="store_true", 
+        help="Blend models trained with original SDSS17 data appended"
+    )
+    args = parser.parse_args()
+    
+    suffix = "_with_original" if args.use_original else ""
     
     # Load labels
     train_path = root / "data" / "raw" / "train.csv"
@@ -25,37 +37,74 @@ def main() -> None:
     train = pd.read_csv(train_path)
     test = pd.read_csv(test_path)
     
+    if args.use_original:
+        orig_path = root / "data" / "external" / "star_classification.csv"
+        if orig_path.exists():
+            print("Loading original SDSS17 dataset for blending labels...")
+            orig = pd.read_csv(orig_path)
+            orig_cols = ["alpha", "delta", "u", "g", "r", "i", "z", "redshift", "class"]
+            orig = orig[orig_cols].copy()
+            
+            # Reconstruct synthetic threshold features with 100% precision
+            u_r = orig["u"] - orig["r"]
+            orig["galaxy_population"] = np.where(u_r > 2.20, "Red_Sequence", "Blue_Cloud")
+            
+            g_r = orig["g"] - orig["r"]
+            orig["spectral_type"] = pd.cut(
+                g_r,
+                bins=[-np.inf, 0.0, 0.5, 1.0, np.inf],
+                labels=["O/B", "A/F", "G/K", "M"]
+            ).astype(str)
+            
+            orig["id"] = -1
+            
+            train = pd.concat([train, orig], ignore_index=True)
+            print(f"Appended {len(orig)} original rows. Combined train shape: {train.shape}")
+        else:
+            print(f"Warning: Original dataset not found at {orig_path}. Proceeding with synthetic data only.")
+            
     le = LabelEncoder()
     y = le.fit_transform(train["class"])
     
     # Paths to OOF files
     oof_dir = root / "models" / "oof"
-    lgb_oof_path = oof_dir / "oof_lightgbm_stellar_baseline.npy"
-    cat_oof_path = oof_dir / "oof_catboost_stellar_baseline.npy"
-    xgb_oof_path = oof_dir / "oof_xgboost_stellar_baseline.npy"
+    lgb_oof_path = oof_dir / f"oof_lightgbm_stellar_baseline{suffix}.npy"
+    xgb_oof_path = oof_dir / f"oof_xgboost_stellar_baseline{suffix}.npy"
     
-    if not lgb_oof_path.exists() or not cat_oof_path.exists() or not xgb_oof_path.exists():
-        print("Error: OOF predictions from all three models must be generated first.")
+    if not lgb_oof_path.exists() or not xgb_oof_path.exists():
+        print("Error: OOF predictions from LightGBM and XGBoost must be generated first.")
         print(f"Checking for LightGBM OOF: {lgb_oof_path.exists()}")
-        print(f"Checking for CatBoost OOF: {cat_oof_path.exists()}")
         print(f"Checking for XGBoost OOF: {xgb_oof_path.exists()}")
         return
         
     lgb_oof = np.load(lgb_oof_path)
-    cat_oof = np.load(cat_oof_path)
     xgb_oof = np.load(xgb_oof_path)
     
-    # 3-way Grid Search for optimal blend weights (w1 + w2 + w3 = 1.0)
+    # Check if CatBoost is available (optional in 3-way blend if we only ran LGB + XGB)
+    cat_oof_path = oof_dir / f"oof_catboost_stellar_baseline{suffix}.npy"
+    use_cat = cat_oof_path.exists()
+    
+    if use_cat:
+        print("Including CatBoost in the blend...")
+        cat_oof = np.load(cat_oof_path)
+    else:
+        print("CatBoost OOF not found. Running 2-way blend (LGB + XGB) instead.")
+        cat_oof = np.zeros_like(lgb_oof)
+        
+    # Grid Search for optimal blend weights (w1 + w2 + w3 = 1.0)
     best_weights = (0.0, 0.0, 0.0)
     best_score = 0.0
     
-    print("Searching for optimal 3-way blend weights (w_lgb * LGB + w_cat * Cat + w_xgb * XGB)...")
+    print(f"Searching for optimal blend weights{suffix}...")
     
-    # Iterate with step size 0.02 for finer search (approx 1326 combinations)
+    # Iterate with step size 0.02
     for w_lgb in np.linspace(0, 1, 51):
-        for w_cat in np.linspace(0, 1 - w_lgb, 51):
+        # If not using CatBoost, w_cat is fixed to 0
+        w_cat_max = (1 - w_lgb) if use_cat else 0.0
+        w_cat_steps = 51 if use_cat else 1
+        
+        for w_cat in np.linspace(0, w_cat_max, w_cat_steps):
             w_xgb = 1.0 - w_lgb - w_cat
-            # Ensure sum is exactly 1.0 and weights are non-negative
             if w_xgb < -1e-6:
                 continue
             w_xgb = max(w_xgb, 0.0)
@@ -70,21 +119,25 @@ def main() -> None:
                 
     w_lgb, w_cat, w_xgb = best_weights
     print(f"Optimal weights -> LightGBM: {w_lgb:.2f}, CatBoost: {w_cat:.2f}, XGBoost: {w_xgb:.2f}")
-    print(f"Best 3-way blended OOF Balanced Accuracy: {best_score:.6f}")
+    print(f"Best blended OOF Balanced Accuracy: {best_score:.6f}")
     
     # Load test prediction probabilities
-    lgb_test_path = oof_dir / "test_preds_lightgbm_stellar_baseline.npy"
-    cat_test_path = oof_dir / "test_preds_catboost_stellar_baseline.npy"
-    xgb_test_path = oof_dir / "test_preds_xgboost_stellar_baseline.npy"
+    lgb_test_path = oof_dir / f"test_preds_lightgbm_stellar_baseline{suffix}.npy"
+    xgb_test_path = oof_dir / f"test_preds_xgboost_stellar_baseline{suffix}.npy"
     
-    if not lgb_test_path.exists() or not cat_test_path.exists() or not xgb_test_path.exists():
+    if not lgb_test_path.exists() or not xgb_test_path.exists():
         print("Warning: Test probability files not found. Cannot generate blended submission.")
         return
         
     lgb_test = np.load(lgb_test_path)
-    cat_test = np.load(cat_test_path)
     xgb_test = np.load(xgb_test_path)
     
+    if use_cat:
+        cat_test_path = oof_dir / f"test_preds_catboost_stellar_baseline{suffix}.npy"
+        cat_test = np.load(cat_test_path) if cat_test_path.exists() else np.zeros_like(lgb_test)
+    else:
+        cat_test = np.zeros_like(lgb_test)
+        
     # Blend test predictions
     blended_test = w_lgb * lgb_test + w_cat * cat_test + w_xgb * xgb_test
     test_classes = np.argmax(blended_test, axis=1)
@@ -92,7 +145,7 @@ def main() -> None:
     
     # Save blended submission
     submissions_dir = root / "submissions"
-    sub_path = submissions_dir / "submission_blended_lgb_cat_xgb.csv"
+    sub_path = submissions_dir / f"submission_blended_lgb_cat_xgb{suffix}.csv"
     sub = pd.DataFrame({"id": test["id"], "class": test_class_labels})
     sub.to_csv(sub_path, index=False)
     print(f"Successfully saved blended submission to {sub_path.relative_to(root)}")
@@ -100,10 +153,10 @@ def main() -> None:
     # Append results to experiment log
     result_row = {
         "timestamp_utc": utc_now(),
-        "run_name": "lgb_cat_xgb_blend",
+        "run_name": f"lgb_cat_xgb_blend{suffix}",
         "competition": "playground-series-s6e6",
         "model_family": "BLEND",
-        "feature_set": "Ensemble (LGB + CatBoost + XGBoost)",
+        "feature_set": f"Ensemble (LGB + Cat + XGB){suffix}",
         "oof_score": best_score,
         "fold_scores_json": [],
         "submission_path": str(sub_path),

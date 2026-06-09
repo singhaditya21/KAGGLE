@@ -62,7 +62,11 @@ def feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def train_s6e6(model_type: str = "lightgbm", config_path: Path | None = None) -> None:
+def train_s6e6(
+    model_type: str = "lightgbm", 
+    config_path: Path | None = None, 
+    use_original: bool = False
+) -> None:
     root = project_root()
     
     # Default configs
@@ -113,6 +117,10 @@ def train_s6e6(model_type: str = "lightgbm", config_path: Path | None = None) ->
                 else:
                     config[k] = v
                     
+    # Adjust run_name if using original data
+    if use_original:
+        config["run_name"] = f"{config['run_name']}_with_original"
+                    
     print(f"Starting {model_type.upper()} pipeline for run: {config['run_name']}")
     
     # Path configuration
@@ -125,6 +133,33 @@ def train_s6e6(model_type: str = "lightgbm", config_path: Path | None = None) ->
         
     train = pd.read_csv(train_path)
     test = pd.read_csv(test_path)
+    
+    # Optional: Load and append original dataset
+    if use_original:
+        orig_path = root / "data" / "external" / "star_classification.csv"
+        if orig_path.exists():
+            print("Loading original SDSS17 dataset...")
+            orig = pd.read_csv(orig_path)
+            orig_cols = ["alpha", "delta", "u", "g", "r", "i", "z", "redshift", "class"]
+            orig = orig[orig_cols].copy()
+            
+            # Reconstruct synthetic threshold features with 100% precision
+            u_r = orig["u"] - orig["r"]
+            orig["galaxy_population"] = np.where(u_r > 2.20, "Red_Sequence", "Blue_Cloud")
+            
+            g_r = orig["g"] - orig["r"]
+            orig["spectral_type"] = pd.cut(
+                g_r,
+                bins=[-np.inf, 0.0, 0.5, 1.0, np.inf],
+                labels=["O/B", "A/F", "G/K", "M"]
+            ).astype(str)
+            
+            orig["id"] = -1
+            
+            train = pd.concat([train, orig], ignore_index=True)
+            print(f"Appended {len(orig)} original rows. Combined train shape: {train.shape}")
+        else:
+            print(f"Warning: Original dataset not found at {orig_path}. Proceeding with synthetic data only.")
     
     # Feature Engineering
     print("Engineering features...")
@@ -282,9 +317,14 @@ def main() -> None:
         help="Model type to train"
     )
     parser.add_argument("--config", type=Path, default=None, help="Path to config JSON file")
+    parser.add_argument(
+        "--use-original", 
+        action="store_true", 
+        help="Append the original SDSS17 dataset to training data"
+    )
     args = parser.parse_args()
     
-    train_s6e6(args.model, args.config)
+    train_s6e6(args.model, args.config, args.use_original)
 
 
 if __name__ == "__main__":

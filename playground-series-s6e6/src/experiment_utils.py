@@ -47,16 +47,25 @@ def validate_submission(
         raise ValueError(f"{path.name} ID order does not match the sample submission")
     if submission[target_col].isna().any():
         raise ValueError(f"{path.name} contains NaN predictions")
-    if not np.isfinite(submission[target_col]).all():
-        raise ValueError(f"{path.name} contains non-finite predictions")
         
-    return {
-        "rows": int(len(submission)),
-        "min": float(submission[target_col].min()),
-        "max": float(submission[target_col].max()),
-        "mean": float(submission[target_col].mean()),
-        "std": float(submission[target_col].std()),
-    }
+    # Check if target column is numeric
+    if pd.api.types.is_numeric_dtype(submission[target_col]):
+        if not np.isfinite(submission[target_col]).all():
+            raise ValueError(f"{path.name} contains non-finite predictions")
+        return {
+            "rows": int(len(submission)),
+            "min": float(submission[target_col].min()),
+            "max": float(submission[target_col].max()),
+            "mean": float(submission[target_col].mean()),
+            "std": float(submission[target_col].std()),
+        }
+    else:
+        # Categorical/string targets
+        value_counts = submission[target_col].value_counts().to_dict()
+        return {
+            "rows": int(len(submission)),
+            "value_counts": {str(k): int(v) for k, v in value_counts.items()}
+        }
 
 
 def append_result(root: Path, row: dict[str, Any]) -> Path:
