@@ -21,8 +21,14 @@ uv run python src/train_s6e6.py --model lightgbm --use-original
 echo "=== Training XGBoost with original dataset + sample weighting ==="
 uv run python src/train_s6e6.py --model xgboost --use-original
 
-# Run the 13-model stacker
-echo "=== Running Stacker on 13 models (including original-data augmented models) ==="
+echo "=== Training CatBoost with original dataset + sample weighting ==="
+uv run python src/train_s6e6.py --model catboost --use-original
+
+echo "=== Training HistGradientBoosting with original dataset + sample weighting ==="
+uv run python src/train_s6e6.py --model histgb --use-original
+
+# Run the 15-model stacker
+echo "=== Running Stacker on 15 models (including original-data augmented models) ==="
 uv run python src/stacker.py
 
 echo "=== Stacking Pipeline Completed Successfully! ==="

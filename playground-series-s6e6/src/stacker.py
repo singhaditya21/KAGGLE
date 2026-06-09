@@ -117,6 +117,8 @@ def main():
         optional_models = [
             ('our_lgb_orig', oof_dir / 'oof_lightgbm_stellar_baseline_with_original.npy', oof_dir / 'test_preds_lightgbm_stellar_baseline_with_original.npy'),
             ('our_xgb_orig', oof_dir / 'oof_xgboost_stellar_baseline_with_original.npy', oof_dir / 'test_preds_xgboost_stellar_baseline_with_original.npy'),
+            ('our_cat_orig', oof_dir / 'oof_catboost_stellar_baseline_with_original.npy', oof_dir / 'test_preds_catboost_stellar_baseline_with_original.npy'),
+            ('our_histgb_orig', oof_dir / 'oof_histgb_stellar_baseline_with_original.npy', oof_dir / 'test_preds_histgb_stellar_baseline_with_original.npy'),
         ]
         
         for name, oof_p, test_p in optional_models:
