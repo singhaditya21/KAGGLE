@@ -196,7 +196,10 @@ def add_target_encoding(
 def train_s6e6(
     model_type: str = "lightgbm", 
     config_path: Path | None = None, 
-    use_original: bool = False
+    use_original: bool = False,
+    train_file: str = "train.csv",
+    use_pseudo: bool = False,
+    pseudo_weight: float = 0.2
 ) -> None:
     root = project_root()
     
@@ -263,10 +266,17 @@ def train_s6e6(
                     
     if use_original:
         config["run_name"] = f"{config['run_name']}_with_original"
+        
+    if use_pseudo:
+        config["run_name"] = f"{config['run_name']}_with_pseudo"
+        
+    if train_file != "train.csv":
+        file_stem = Path(train_file).stem
+        config["run_name"] = f"{config['run_name']}_{file_stem}"
                     
     print(f"Starting {model_type.upper()} pipeline for run: {config['run_name']}")
     
-    train_path = root / "data" / "raw" / "train.csv"
+    train_path = root / "data" / "raw" / train_file
     test_path = root / "data" / "raw" / "test.csv"
     
     if not train_path.exists() or not test_path.exists():
@@ -322,6 +332,27 @@ def train_s6e6(
             X[c] = X[c].astype("category").cat.codes
             X_test[c] = X_test[c].astype("category").cat.codes
             
+    # Load pseudo-labels if requested
+    pseudo_features = None
+    y_pseudo = None
+    w_pseudo = None
+    if use_pseudo:
+        pseudo_path = root / "data" / "raw" / "pseudo_labels.csv"
+        if pseudo_path.exists():
+            print("Loading pseudo-labeled test dataset...")
+            pseudo_df = pd.read_csv(pseudo_path)
+            # Find the indices in X_test that match pseudo_df["id"]
+            test_mask = test["id"].isin(pseudo_df["id"])
+            pseudo_features = X_test[test_mask].copy()
+            pseudo_ids = test.loc[pseudo_features.index, "id"]
+            pseudo_classes_str = pseudo_df.set_index("id").loc[pseudo_ids, "class"].values
+            y_pseudo = le.transform(pseudo_classes_str)
+            w_pseudo = np.ones(len(pseudo_features)) * pseudo_weight
+            print(f"Extracted {len(pseudo_features)} matching pseudo-labeled features. Mean weight: {pseudo_weight}")
+        else:
+            print(f"Warning: Pseudo-labeled dataset not found at {pseudo_path}. Proceeding without pseudo-labels.")
+            use_pseudo = False
+
     oof_preds = np.zeros((len(train), 3))
     test_preds = np.zeros((len(test), 3))
     
@@ -338,9 +369,15 @@ def train_s6e6(
     print(f"Training {model_type.upper()} with {config['n_splits']}-fold cross-validation...")
     
     for fold, (train_idx, val_idx) in enumerate(skf.split(X, y)):
-        X_train, y_train = X.iloc[train_idx], y[train_idx]
-        X_val, y_val = X.iloc[val_idx], y[val_idx]
-        w_train = sample_weight[train_idx]
+        X_train, y_train = X.iloc[train_idx].copy(), y[train_idx]
+        X_val, y_val = X.iloc[val_idx].copy(), y[val_idx]
+        w_train = sample_weight[train_idx].copy()
+        
+        if use_pseudo and pseudo_features is not None:
+            # Append pseudo labels to training fold only (prevent leakage)
+            X_train = pd.concat([X_train, pseudo_features], ignore_index=True)
+            y_train = np.concatenate([y_train, y_pseudo])
+            w_train = np.concatenate([w_train, w_pseudo])
         
         if model_type == "lightgbm":
             model = lgb.LGBMClassifier(**config["lgb_params"])
@@ -461,9 +498,33 @@ def main() -> None:
         action="store_true", 
         help="Append the original SDSS17 dataset to training data"
     )
+    parser.add_argument(
+        "--train-file",
+        type=str,
+        default="train.csv",
+        help="Name of the training CSV file in data/raw/"
+    )
+    parser.add_argument(
+        "--use-pseudo",
+        action="store_true",
+        help="Use pseudo-labeled test dataset for training"
+    )
+    parser.add_argument(
+        "--pseudo-weight",
+        type=float,
+        default=0.2,
+        help="Sample weight to assign to pseudo-labeled samples"
+    )
     args = parser.parse_args()
     
-    train_s6e6(args.model, args.config, args.use_original)
+    train_s6e6(
+        args.model, 
+        args.config, 
+        args.use_original, 
+        args.train_file, 
+        args.use_pseudo, 
+        args.pseudo_weight
+    )
 
 
 if __name__ == "__main__":
