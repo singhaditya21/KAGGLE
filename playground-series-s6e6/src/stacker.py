@@ -40,6 +40,15 @@ def load_preds(path, expected_rows=None):
         raise ValueError(f"Unsupported file type: {path.suffix}")
 
 def main():
+    import argparse
+    parser = argparse.ArgumentParser(description="Stack OOF predictions.")
+    parser.add_argument(
+        "--exclude-original", 
+        action="store_true", 
+        help="Exclude models trained with the original SDSS17 dataset"
+    )
+    args = parser.parse_args()
+
     root = Path(__file__).resolve().parents[1]
     
     # Load labels
@@ -81,15 +90,15 @@ def main():
     ]
     
     # Optional local models with original dataset
-    optional_models = [
-        ('our_lgb_orig', oof_dir / 'oof_lightgbm_stellar_baseline_with_original.npy', oof_dir / 'test_preds_lightgbm_stellar_baseline_with_original.npy'),
-        ('our_xgb_orig', oof_dir / 'oof_xgboost_stellar_baseline_with_original.npy', oof_dir / 'test_preds_xgboost_stellar_baseline_with_original.npy'),
-        ('our_cat_orig', oof_dir / 'oof_catboost_stellar_baseline_with_original.npy', oof_dir / 'test_preds_catboost_stellar_baseline_with_original.npy'),
-    ]
-    
-    for name, oof_p, test_p in optional_models:
-        if oof_p.exists() and test_p.exists():
-            models_to_stack.append((name, oof_p, test_p))
+    if not args.exclude_original:
+        optional_models = [
+            ('our_lgb_orig', oof_dir / 'oof_lightgbm_stellar_baseline_with_original.npy', oof_dir / 'test_preds_lightgbm_stellar_baseline_with_original.npy'),
+            ('our_xgb_orig', oof_dir / 'oof_xgboost_stellar_baseline_with_original.npy', oof_dir / 'test_preds_xgboost_stellar_baseline_with_original.npy'),
+        ]
+        
+        for name, oof_p, test_p in optional_models:
+            if oof_p.exists() and test_p.exists():
+                models_to_stack.append((name, oof_p, test_p))
             
     loaded_oofs = []
     loaded_tests = []

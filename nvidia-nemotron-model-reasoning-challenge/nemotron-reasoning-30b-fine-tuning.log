@@ -1,0 +1,177 @@
+[{"stream_name":"stderr","time":6.242762715,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.242830571,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.242837106,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.24284137,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":6.799907314,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":6.799938129,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":6.799943919,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":6.799948423,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":1465.151011943,"data":"Mounted Kaggle Inputs were discovered and validated.\n"}
+,{"stream_name":"stdout","time":1465.151084847,"data":"  packages: /kaggle/input/datasets/mayukh18/nemotron-packages/packages\n"}
+,{"stream_name":"stdout","time":1465.151090004,"data":"  causal wheel: /kaggle/input/datasets/mayukh18/nemotron-packages/causal_conv1d-1.6.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n"}
+,{"stream_name":"stdout","time":1465.151108273,"data":"  mamba wheel: /kaggle/input/datasets/mayukh18/nemotron-packages/mamba_ssm-2.3.1+cu12torch2.10cxx11abiTRUE-cp312-cp312-linux_x86_64.whl\n"}
+,{"stream_name":"stdout","time":1465.151114386,"data":"  RTX wheels: /kaggle/input/datasets/llkh0a/rtx-wheels/wheels\n"}
+,{"stream_name":"stdout","time":1465.151119712,"data":"  base model: /kaggle/input/models/metric/nemotron-3-nano-30b-a3b-bf16/transformers/default/1\n"}
+,{"stream_name":"stdout","time":1465.151125112,"data":"  Kien adapter: /kaggle/input/models/kienngx/nemotron-nano-30b-trained/triton/tinker-adapter/1\n"}
+,{"stream_name":"stdout","time":1465.151129856,"data":"  train.csv: /kaggle/input/competitions/nvidia-nemotron-model-reasoning-challenge/train.csv\n"}
+,{"stream_name":"stdout","time":1465.151134491,"data":"  Huikang tokens: /kaggle/input/datasets/huikang/huikang-nemotron-repository-snapshot/nemotron-master/training/sft/04-08-16-14/tokens\n"}
+,{"stream_name":"stdout","time":1465.151139271,"data":"  Huikang order: /kaggle/input/datasets/huikang/huikang-nemotron-repository-snapshot/nemotron-master/training/sft/04-08-16-14/logprobs/index.jsonl\n"}
+,{"stream_name":"stderr","time":1490.429211028,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":1490.429263671,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429272331,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429279024,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429284602,"data":"cuml-cu12 26.2.0 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429289442,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429295388,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429313697,"data":"cudf-cu12 26.2.1 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.429348146,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631843481,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":1490.631879079,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631883208,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631886154,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631888812,"data":"cuml-cu12 26.2.0 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631891367,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631894123,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631896499,"data":"cudf-cu12 26.2.1 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631898866,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631901322,"data":"\n"}
+,{"stream_name":"stderr","time":1490.631903497,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":1490.631906213,"data":"dask-cuda 26.2.0 requires cuda-core==0.3.*, but you have cuda-core 1.0.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631908622,"data":"dask-cuda 26.2.0 requires numba-cuda\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631910984,"data":"distributed-ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631913495,"data":"cuml-cu12 26.2.0 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631915844,"data":"cuml-cu12 26.2.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631918239,"data":"ucxx-cu12 0.48.0 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.1, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631920907,"data":"cudf-cu12 26.2.1 requires numba\u003c0.62.0,\u003e=0.60.0, but you have numba 0.65.1 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1490.631924532,"data":"cudf-cu12 26.2.1 requires numba-cuda[cu12]\u003c0.23.0,\u003e=0.22.2, but you have numba-cuda 0.30.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.684371408,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":1524.684411314,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":1524.684417235,"data":"google-adk 1.29.0 requires google-cloud-bigquery-storage\u003e=2.0.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":1524.684421237,"data":"google-ai-generativelanguage 0.6.15 requires protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,\u003c6.0.0dev,\u003e=3.20.2, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.684426304,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.684430213,"data":"tensorflow 2.19.0 requires protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,\u003c6.0.0dev,\u003e=3.20.3, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.684433839,"data":"grpcio-status 1.71.2 requires protobuf\u003c6.0dev,\u003e=5.26.1, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.75933714,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":1524.75936595,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":1524.75937162,"data":"google-adk 1.29.0 requires google-cloud-bigquery-storage\u003e=2.0.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":1524.759375537,"data":"google-ai-generativelanguage 0.6.15 requires protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,\u003c6.0.0dev,\u003e=3.20.2, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.759379721,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.759391306,"data":"tensorflow 2.19.0 requires protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,\u003c6.0.0dev,\u003e=3.20.3, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.759394818,"data":"grpcio-status 1.71.2 requires protobuf\u003c6.0dev,\u003e=5.26.1, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.759397339,"data":"\n"}
+,{"stream_name":"stderr","time":1524.759399552,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":1524.759402267,"data":"bigframes 2.39.0 requires google-cloud-bigquery-storage\u003c3.0.0,\u003e=2.30.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":1524.759404716,"data":"google-adk 1.29.0 requires google-cloud-bigquery-storage\u003e=2.0.0, which is not installed.\n"}
+,{"stream_name":"stderr","time":1524.759407143,"data":"google-ai-generativelanguage 0.6.15 requires protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,\u003c6.0.0dev,\u003e=3.20.2, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.759409723,"data":"tensorflow 2.19.0 requires numpy\u003c2.2.0,\u003e=1.26.0, but you have numpy 2.4.6 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.759412092,"data":"tensorflow 2.19.0 requires protobuf!=4.21.0,!=4.21.1,!=4.21.2,!=4.21.3,!=4.21.4,!=4.21.5,\u003c6.0.0dev,\u003e=3.20.3, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stderr","time":1524.75942211,"data":"grpcio-status 1.71.2 requires protobuf\u003c6.0dev,\u003e=5.26.1, but you have protobuf 6.33.5 which is incompatible.\n"}
+,{"stream_name":"stdout","time":1529.154357214,"data":"🦥 Unsloth: Will patch your computer to enable 2x faster free finetuning.\n"}
+,{"stream_name":"stderr","time":1538.440892503,"data":"2026-06-09 05:02:30.927793: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.441294824,"data":"WARNING: All log messages before absl::InitializeLog() is called are written to STDERR\n"}
+,{"stream_name":"stderr","time":1538.441316695,"data":"E0000 00:00:1780981351.119135      24 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.441322845,"data":"E0000 00:00:1780981351.179020      24 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.441328005,"data":"W0000 00:00:1780981351.604536      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.4413367,"data":"W0000 00:00:1780981351.604582      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.441340054,"data":"W0000 00:00:1780981351.604585      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.441343623,"data":"W0000 00:00:1780981351.604587      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.64604271,"data":"2026-06-09 05:02:30.927793: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.646063941,"data":"WARNING: All log messages before absl::InitializeLog() is called are written to STDERR\n"}
+,{"stream_name":"stderr","time":1538.646067968,"data":"E0000 00:00:1780981351.119135      24 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.646071535,"data":"E0000 00:00:1780981351.179020      24 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.646074928,"data":"W0000 00:00:1780981351.604536      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.646078222,"data":"W0000 00:00:1780981351.604582      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.646082222,"data":"W0000 00:00:1780981351.604585      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.64610071,"data":"W0000 00:00:1780981351.604587      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.646117192,"data":"\n"}
+,{"stream_name":"stderr","time":1538.646120865,"data":"2026-06-09 05:02:30.927793: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.646125122,"data":"WARNING: All log messages before absl::InitializeLog() is called are written to STDERR\n"}
+,{"stream_name":"stderr","time":1538.646128726,"data":"E0000 00:00:1780981351.119135      24 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.646132495,"data":"E0000 00:00:1780981351.179020      24 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered\n"}
+,{"stream_name":"stderr","time":1538.646137339,"data":"W0000 00:00:1780981351.604536      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.646146718,"data":"W0000 00:00:1780981351.604582      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.646149519,"data":"W0000 00:00:1780981351.604585      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1538.646151974,"data":"W0000 00:00:1780981351.604587      24 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.\n"}
+,{"stream_name":"stderr","time":1557.014993826,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":1557.015029214,"data":"    Found GPU0 Tesla P100-PCIE-16GB which is of cuda capability 6.0.\n"}
+,{"stream_name":"stderr","time":1557.015036511,"data":"    Minimum and Maximum cuda capability supported by this version of PyTorch is\n"}
+,{"stream_name":"stderr","time":1557.015042251,"data":"    (7.0) - (12.0)\n"}
+,{"stream_name":"stderr","time":1557.015047243,"data":"    \n"}
+,{"stream_name":"stderr","time":1557.015051867,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":1557.015056943,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":1557.015063539,"data":"    Please install PyTorch with a following CUDA\n"}
+,{"stream_name":"stderr","time":1557.015072601,"data":"    configurations:  12.6 following instructions at\n"}
+,{"stream_name":"stderr","time":1557.015076193,"data":"    https://pytorch.org/get-started/locally/\n"}
+,{"stream_name":"stderr","time":1557.015079446,"data":"    \n"}
+,{"stream_name":"stderr","time":1557.015082546,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":1557.015085779,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":1557.015089147,"data":"Tesla P100-PCIE-16GB with CUDA capability sm_60 is not compatible with the current PyTorch installation.\n"}
+,{"stream_name":"stderr","time":1557.01509251,"data":"The current PyTorch install supports CUDA capabilities sm_70 sm_75 sm_80 sm_86 sm_90 sm_100 sm_120.\n"}
+,{"stream_name":"stderr","time":1557.015095794,"data":"If you want to use the Tesla P100-PCIE-16GB GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/\n"}
+,{"stream_name":"stderr","time":1557.015107708,"data":"\n"}
+,{"stream_name":"stderr","time":1557.015111546,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":1557.015115385,"data":"\n"}
+,{"stream_name":"stderr","time":1557.015118876,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":1557.015122684,"data":"    Found GPU0 Tesla P100-PCIE-16GB which is of cuda capability 6.0.\n"}
+,{"stream_name":"stderr","time":1557.015126419,"data":"    Minimum and Maximum cuda capability supported by this version of PyTorch is\n"}
+,{"stream_name":"stderr","time":1557.015128928,"data":"    (7.0) - (12.0)\n"}
+,{"stream_name":"stderr","time":1557.015131232,"data":"    \n"}
+,{"stream_name":"stderr","time":1557.015133527,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":1557.015135821,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":1557.01513825,"data":"    Please install PyTorch with a following CUDA\n"}
+,{"stream_name":"stderr","time":1557.015140599,"data":"    configurations:  12.6 following instructions at\n"}
+,{"stream_name":"stderr","time":1557.015143101,"data":"    https://pytorch.org/get-started/locally/\n"}
+,{"stream_name":"stderr","time":1557.015145444,"data":"    \n"}
+,{"stream_name":"stderr","time":1557.015147706,"data":"  queued_call()\n"}
+,{"stream_name":"stderr","time":1557.015149964,"data":"/usr/local/lib/python3.12/dist-packages/torch/cuda/__init__.py:435: UserWarning: \n"}
+,{"stream_name":"stderr","time":1557.01515246,"data":"Tesla P100-PCIE-16GB with CUDA capability sm_60 is not compatible with the current PyTorch installation.\n"}
+,{"stream_name":"stderr","time":1557.01515498,"data":"The current PyTorch install supports CUDA capabilities sm_70 sm_75 sm_80 sm_86 sm_90 sm_100 sm_120.\n"}
+,{"stream_name":"stderr","time":1557.015157554,"data":"If you want to use the Tesla P100-PCIE-16GB GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/\n"}
+,{"stream_name":"stderr","time":1557.015160075,"data":"\n"}
+,{"stream_name":"stderr","time":1557.015162388,"data":"  queued_call()\n"}
+,{"stream_name":"stdout","time":1565.51031603,"data":"Unsloth: causal_conv1d CUDA kernels not compatible with this GPU. Using PyTorch slow path for Mamba models.\n"}
+,{"stream_name":"stdout","time":1568.407658885,"data":"🦥 Unsloth Zoo will now patch everything to make training faster!\n"}
+,{"stream_name":"stdout","time":1571.395425157,"data":"Warm start: Kien Tinker v14, rank=32, alpha=32\n"}
+,{"stream_name":"stdout","time":1571.395456268,"data":"GPU: Tesla P100-PCIE-16GB, sm_60\n"}
+,{"stream_name":"stdout","time":1571.395466791,"data":"torch=2.10.0+cu128, cuda=12.8\n"}
+,{"stream_name":"stdout","time":1571.395472025,"data":"mamba_ssm=2.3.1, causal_conv1d=1.6.1\n"}
+,{"stream_name":"stdout","time":1571.395490065,"data":"VRAM: 17.1 GB\n"}
+,{"stream_name":"stderr","time":1574.908633913,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":1574.908663315,"data":"  File \"\u003cstring\u003e\", line 1, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":1574.908670548,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 131, in execute_notebook\n"}
+,{"stream_name":"stderr","time":1574.908806818,"data":"    raise_for_execution_errors(nb, output_path)\n"}
+,{"stream_name":"stderr","time":1574.908854054,"data":"  File \"/usr/local/lib/python3.12/dist-packages/papermill/execute.py\", line 251, in raise_for_execution_errors\n"}
+,{"stream_name":"stderr","time":1574.909021436,"data":"    raise error\n"}
+,{"stream_name":"stderr","time":1574.909185812,"data":"papermill.exceptions.PapermillExecutionError: \n"}
+,{"stream_name":"stderr","time":1574.909193667,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":1574.90919817,"data":"Exception encountered at \"In [6]\":\n"}
+,{"stream_name":"stderr","time":1574.909202058,"data":"---------------------------------------------------------------------------\n"}
+,{"stream_name":"stderr","time":1574.9092062,"data":"AcceleratorError                          Traceback (most recent call last)\n"}
+,{"stream_name":"stderr","time":1574.909209818,"data":"/tmp/ipykernel_24/1632158200.py in \u003ccell line: 0\u003e()\n"}
+,{"stream_name":"stderr","time":1574.90921372,"data":"      3 # On Modal launcher, neither fires (main() submits the remote call instead).\n"}
+,{"stream_name":"stderr","time":1574.909217599,"data":"      4 if IS_KAGGLE:\n"}
+,{"stream_name":"stderr","time":1574.909220933,"data":"----\u003e 5     run_training()\n"}
+,{"stream_name":"stderr","time":1574.909224429,"data":"\n"}
+,{"stream_name":"stderr","time":1574.909227672,"data":"/tmp/ipykernel_24/2160218886.py in run_training()\n"}
+,{"stream_name":"stderr","time":1574.909231188,"data":"     62     from causal_conv1d import causal_conv1d_fn\n"}
+,{"stream_name":"stderr","time":1574.909234627,"data":"     63 \n"}
+,{"stream_name":"stderr","time":1574.909260681,"data":"---\u003e 64     _x = torch.randn(1, 256, 32, device=\"cuda\", dtype=torch.bfloat16)\n"}
+,{"stream_name":"stderr","time":1574.909265557,"data":"     65     _w = torch.randn(256, 4, device=\"cuda\", dtype=torch.bfloat16)\n"}
+,{"stream_name":"stderr","time":1574.909269699,"data":"     66     causal_conv1d_fn(_x, _w, None, activation=\"silu\")\n"}
+,{"stream_name":"stderr","time":1574.909273233,"data":"\n"}
+,{"stream_name":"stderr","time":1574.909276469,"data":"AcceleratorError: CUDA error: no kernel image is available for execution on the device\n"}
+,{"stream_name":"stderr","time":1574.909280047,"data":"Search for `cudaErrorNoKernelImageForDevice' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\n"}
+,{"stream_name":"stderr","time":1574.909283912,"data":"CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.\n"}
+,{"stream_name":"stderr","time":1574.90928751,"data":"For debugging consider passing CUDA_LAUNCH_BLOCKING=1\n"}
+,{"stream_name":"stderr","time":1574.909291012,"data":"Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.\n"}
+,{"stream_name":"stderr","time":1574.909294563,"data":"\n"}
+,{"stream_name":"stderr","time":1574.909297848,"data":"\n"}
+,{"stream_name":"stderr","time":1576.993705981,"data":"/usr/local/lib/python3.12/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":1576.993753954,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":1577.140190666,"data":"/usr/local/lib/python3.12/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":1577.14023425,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":1577.813102043,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":1578.12898126,"data":"[NbConvertApp] Writing 80023 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":1580.586348251,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1581.609439414,"data":"[NbConvertApp] Writing 494128 bytes to __results__.html\n"}
+]
