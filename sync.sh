@@ -7,7 +7,6 @@ git add -A
 # Only commit if there are staged changes
 if ! git diff --cached --quiet; then
     git commit -m "Auto-sync: $(date)"
-    git push origin main
 else
     echo "No changes to sync."
 fi
