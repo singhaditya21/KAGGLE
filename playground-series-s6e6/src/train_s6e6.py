@@ -67,6 +67,7 @@ def feature_engineering_v3(df: pd.DataFrame, train_ref: pd.DataFrame | None = No
     # Redshift features
     df["redshift_abs"] = df["redshift"].abs()
     df["redshift_log1p_abs"] = np.log1p(df["redshift_abs"])
+    df["redshift_symlog"] = np.sign(df["redshift"]) * df["redshift_log1p_abs"]
     df["redshift_cbrt"] = np.cbrt(df["redshift"])
     df["redshift_is_near_zero"] = (df["redshift_abs"] < 0.005).astype(int)
     df["redshift_is_negative"] = (df["redshift"] < 0).astype(int)
@@ -101,6 +102,53 @@ def feature_engineering_v3(df: pd.DataFrame, train_ref: pd.DataFrame | None = No
     df["flux_max"] = df[flux_cols].max(axis=1)
     df["flux_min"] = df[flux_cols].min(axis=1)
     df["flux_range"] = df["flux_max"] - df["flux_min"]
+    
+    # Advanced interactions
+    # Redshift-color interactions
+    for col in ["u_g", "g_r", "r_i", "i_z", "u_r", "g_i"]:
+        df[f"{col}_x_redshift"] = df[col] * df["redshift"]
+        df[f"{col}_x_redshift_abs"] = df[col] * df["redshift_abs"]
+        df[f"{col}_x_redshift_log"] = df[col] * df["redshift_log1p_abs"]
+        
+    # Coordinate-redshift interactions (3D spatial positions)
+    for axis in ["x", "y", "z"]:
+        df[f"{axis}_x_redshift"] = df[axis] * df["redshift"]
+        df[f"{axis}_x_redshift_abs"] = df[axis] * df["redshift_abs"]
+        df[f"{axis}_x_redshift_log"] = df[axis] * df["redshift_log1p_abs"]
+        
+    # Coordinate-color interactions
+    for axis in ["x", "y", "z"]:
+        df[f"{axis}_x_g_r"] = df[axis] * df["g_r"]
+        df[f"{axis}_x_u_g"] = df[axis] * df["u_g"]
+
+    # Celestial neighborhood spatial clustering features
+    from sklearn.neighbors import NearestNeighbors
+    coords_ref = ref_df[["x", "y", "z"]].values
+    coords_query = df[["x", "y", "z"]].values
+    
+    # We find 11 nearest neighbors in the reference coordinate space
+    nn = NearestNeighbors(n_neighbors=11, metric="euclidean", n_jobs=-1)
+    nn.fit(coords_ref)
+    distances, indices = nn.kneighbors(coords_query)
+    
+    # Local sky density features
+    df["dist_to_5th_neighbor"] = distances[:, 5]
+    df["dist_to_10th_neighbor"] = distances[:, 10]
+    df["mean_dist_to_10_neighbors"] = distances[:, 1:].mean(axis=1)
+    
+    # Lookup values of neighbors in reference set
+    ref_redshifts = ref_df["redshift"].values
+    neighbor_redshifts = ref_redshifts[indices[:, 1:11]]  # excludes self (index 0) if query is in ref
+    df["neighbor_mean_redshift"] = neighbor_redshifts.mean(axis=1)
+    df["neighbor_std_redshift"] = neighbor_redshifts.std(axis=1)
+    df["neighbor_max_redshift"] = neighbor_redshifts.max(axis=1)
+    df["neighbor_min_redshift"] = neighbor_redshifts.min(axis=1)
+    
+    # Neighbor color lookup
+    ref_gr = (ref_df["g"] - ref_df["r"]).values
+    neighbor_gr = ref_gr[indices[:, 1:11]]
+    df["neighbor_mean_g_r"] = neighbor_gr.mean(axis=1)
+    df["neighbor_std_g_r"] = neighbor_gr.std(axis=1)
     
     # Categoricals calculated
     df["spectral_type_calc"] = pd.cut(
@@ -229,7 +277,8 @@ def train_s6e6(
             "max_depth": 6,
             "n_estimators": 1000,
             "random_state": 42,
-            "n_jobs": -1
+            "n_jobs": -1,
+            "early_stopping_rounds": 50
         },
         "cat_params": {
             "loss_function": "MultiClass",
