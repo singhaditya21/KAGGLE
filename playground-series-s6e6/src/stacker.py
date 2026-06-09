@@ -87,6 +87,8 @@ def main():
         ('our_lgb', oof_dir / 'oof_lightgbm_stellar_baseline.npy', oof_dir / 'test_preds_lightgbm_stellar_baseline.npy'),
         ('our_xgb', oof_dir / 'oof_xgboost_stellar_baseline.npy', oof_dir / 'test_preds_xgboost_stellar_baseline.npy'),
         ('our_cat', oof_dir / 'oof_catboost_stellar_baseline.npy', oof_dir / 'test_preds_catboost_stellar_baseline.npy'),
+        ('our_et', oof_dir / 'oof_extratrees_stellar_baseline.npy', oof_dir / 'test_preds_extratrees_stellar_baseline.npy'),
+        ('our_histgb', oof_dir / 'oof_histgb_stellar_baseline.npy', oof_dir / 'test_preds_histgb_stellar_baseline.npy'),
     ]
     
     # Optional local models with original dataset
@@ -192,12 +194,38 @@ def main():
         test_final += clf.predict_proba(X_test) / n_splits
         
     overall_score = balanced_accuracy_score(y, np.argmax(oof_final, axis=1))
-    print(f"Overall Stacked CV Balanced Acc: {overall_score:.6f}")
+    print(f"Overall Stacked CV Balanced Acc (Argmax): {overall_score:.6f}")
+    
+    # Threshold Optimization for Balanced Accuracy
+    print("\nOptimizing decision thresholds for Balanced Accuracy...")
+    best_weights = np.array([1.0, 1.0, 1.0])
+    best_score = overall_score
+    
+    # Grid search for multipliers around 1.0
+    for w1 in np.linspace(0.85, 1.15, 61):
+        for w2 in np.linspace(0.85, 1.15, 61):
+            w = np.array([1.0, w1, w2])
+            preds = np.argmax(oof_final * w, axis=1)
+            score = balanced_accuracy_score(y, preds)
+            if score > best_score:
+                best_score = score
+                best_weights = w
+                
+    print(f"Optimized CV Balanced Acc: {best_score:.6f} with class multipliers: {best_weights}")
+    
+    # Save OOF and test predictions of the stacker
+    np.save(oof_dir / 'oof_stacked.npy', oof_final)
+    np.save(oof_dir / 'test_preds_stacked.npy', test_final)
+    print(f"Saved stacked predictions to {oof_dir.relative_to(root)}")
+    
+    # Apply optimized weights to test predictions
+    test_preds_weighted = test_final * best_weights
+    test_classes = np.argmax(test_preds_weighted, axis=1)
     
     # Save submission
     sub = pd.DataFrame({
         "id": test["id"],
-        "class": le.inverse_transform(np.argmax(test_final, axis=1))
+        "class": le.inverse_transform(test_classes)
     })
     sub_path = root / "submissions" / "submission_stacked.csv"
     sub.to_csv(sub_path, index=False)
