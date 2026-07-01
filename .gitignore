@@ -1,0 +1,6 @@
+kaggle_token.txt
+kaggle.json
+.kaggle/
+*.key
+*.pem
+.env
